@@ -8,7 +8,9 @@ plugins {
     kotlin("jvm") version "1.8.21"
     id("io.ktor.plugin") version "2.3.0"
                 id("org.jetbrains.kotlin.plugin.serialization") version "1.8.21"
+    id("org.sonarqube") version "3.5.0.2730"
 }
+
 
 group = "com.example"
 version = "0.0.1"
@@ -41,4 +43,10 @@ dependencies {
 
     //Bcrypt (Password hashing)
     implementation("at.favre.lib:bcrypt:$bcrypt_version")
+
+    //DotEnv
+    implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
+
+    //CORS
+    implementation("io.ktor:ktor-server-cors:$ktor_version")
 }

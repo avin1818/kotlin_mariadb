@@ -1,8 +1,6 @@
 package com.example.data.models.post
 
-import com.example.data.models.reply.Reply
 import com.example.data.models.reply.ReplyDto
-import com.example.data.models.reply.toReplyModel
 import kotlinx.serialization.Serializable
 import org.bson.types.ObjectId
 

@@ -1,7 +1,5 @@
 package com.example.interfaces
 
-import org.bson.types.ObjectId
-
 
 interface Repository<T> {
     fun insert(item: T): Boolean

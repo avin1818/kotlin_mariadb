@@ -1,6 +1,5 @@
 package com.example.data.models.topic
 
-import com.example.data.models.thread.ThreadDto
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -1,11 +1,10 @@
 package com.example.services
 
-import com.example.data.models.user.User
 import com.example.interfaces.Repository
 import com.mongodb.client.MongoCollection
 import org.bson.types.ObjectId
-import org.litote.kmongo.*
-import org.litote.kmongo.id.toId
+import org.litote.kmongo.deleteOneById
+import org.litote.kmongo.findOneById
 
 open class MongoRepository<T>(private val collection: MongoCollection<T>): Repository<T> {
 

@@ -3,8 +3,6 @@ package com.example.services
 import com.example.data.models.user.User
 import com.example.interfaces.UserRepository
 import com.mongodb.client.MongoCollection
-import com.mongodb.client.model.IndexOptions
-import com.mongodb.client.model.Indexes
 import org.bson.types.ObjectId
 import org.litote.kmongo.eq
 import org.litote.kmongo.findOne

@@ -1,6 +1,5 @@
 package com.example.data.models.thread
 
-import com.example.data.models.post.PostDto
 import kotlinx.serialization.Serializable
 import org.bson.types.ObjectId
 

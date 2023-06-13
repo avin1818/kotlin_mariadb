@@ -2,6 +2,7 @@ package com.example.services
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.example.data.models.AdminUser
 import com.example.data.models.JwtTokenConfig
 import com.example.data.models.user.UserDTO
 import java.util.*
@@ -19,6 +20,21 @@ class JwtAuthService {
         .withIssuer(jwtTokenConfig.issuer)
         .withClaim("id", user.id)
         .withClaim("role", user.role)
+        .withAudience(jwtTokenConfig.audience)
+        .sign(Algorithm.HMAC512(jwtTokenConfig.secret))
+
+    fun generateToken(admin: AdminUser, jwtTokenConfig: JwtTokenConfig): String = JWT.create()
+        .withIssuer(jwtTokenConfig.issuer)
+        .withClaim("id", admin.id)
+        .withClaim("role", admin.role)
+        .withAudience(jwtTokenConfig.audience)
+        .withExpiresAt(getExpiration(jwtTokenConfig.expiresIn))
+        .sign(Algorithm.HMAC512(jwtTokenConfig.secret))
+
+    fun generateRefreshToken(admin: AdminUser, jwtTokenConfig: JwtTokenConfig): String = JWT.create()
+        .withIssuer(jwtTokenConfig.issuer)
+        .withClaim("id", admin.id)
+        .withClaim("role", admin.role)
         .withAudience(jwtTokenConfig.audience)
         .sign(Algorithm.HMAC512(jwtTokenConfig.secret))
 

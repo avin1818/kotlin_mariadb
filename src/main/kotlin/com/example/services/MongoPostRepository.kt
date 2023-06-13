@@ -1,15 +1,12 @@
 package com.example.services
 
-import com.example.data.models.Request.MarkAsFavRequest
 import com.example.data.models.post.Post
 import com.example.data.models.reply.Reply
-import com.example.data.models.topic.Topic
 import com.example.data.models.user_favorite.UserFavorite
 import com.example.interfaces.PostRepository
 import com.mongodb.client.MongoCollection
 import org.bson.types.ObjectId
 import org.litote.kmongo.eq
-import org.litote.kmongo.findOne
 import org.litote.kmongo.findOneById
 import org.litote.kmongo.replaceOne
 

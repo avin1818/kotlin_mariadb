@@ -1,7 +1,6 @@
 package com.example.services
 
 import com.example.data.models.post.Post
-import com.example.data.models.post.toDto
 import com.example.data.models.reply.Reply
 import com.example.data.models.thread.Thread
 import com.example.data.models.topic.Topic
