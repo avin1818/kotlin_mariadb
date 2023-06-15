@@ -1,6 +1,7 @@
 package com.example.services
 
 import com.example.data.models.post.Post
+import com.example.data.models.privilegedUser.PrivilegedUser
 import com.example.data.models.refreshToken.RefreshToken
 import com.example.data.models.reply.Reply
 import com.example.data.models.thread.Thread
@@ -21,10 +22,15 @@ object MongoDBManager {
     init {
         database.getCollection<User>().createIndex(Indexes.ascending("phoneNo"), IndexOptions().unique(true))
         database.getCollection<UserFavorite>().createIndex(Indexes.ascending("userId"), IndexOptions().unique(true))
+        database.getCollection<PrivilegedUser>().createIndex(Indexes.ascending("email"), IndexOptions().unique(true))
     }
 
     val userRepository: UserRepository by lazy {
         MongoUserRepository(database.getCollection<User>())
+    }
+
+    val privilegedUserRepository: PrivilegedUserRepository by lazy {
+        MongoPrivilegedUserRepository(database.getCollection<PrivilegedUser>())
     }
 
     val topicRepository: TopicRepository by lazy {

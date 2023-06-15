@@ -6,7 +6,6 @@ import com.example.routes.forumApiRoutes
 import com.example.routes.loginApiRoutes
 import com.example.services.JwtAuthService
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
 import io.ktor.server.routing.*
 
 val jwtAuthService = JwtAuthService()
@@ -16,10 +15,7 @@ fun Application.configureRouting(jwtAccessTokenConfig: JwtTokenConfig, jwtRefres
     routing {
 
         loginApiRoutes(jwtAccessTokenConfig, jwtRefreshTokenConfig)
-
-        authenticate {
-            forumApiRoutes()
-            adminApiRoutes()
-        }
+        forumApiRoutes()
+        adminApiRoutes()
     }
 }

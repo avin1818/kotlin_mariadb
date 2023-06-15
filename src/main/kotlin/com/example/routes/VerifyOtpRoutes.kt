@@ -34,29 +34,38 @@ fun Route.verifyOtpRoute(jwtAccessTokenConfig: JwtTokenConfig, jwtRefreshTokenCo
             if (userCreated is Boolean) {
                 val userData = findUserByPhoneNo(phoneNumber)
                 userData?.let {
-                    val userDto = userData.toDto()
-                    val refreshToken = jwtAuthService.generateRefreshToken(userDto, jwtRefreshTokenConfig)
-                    val accessToken = jwtAuthService.generateToken(userDto, jwtAccessTokenConfig)
-                    val refreshTokenUpdated = addRefreshToken(refreshToken, ObjectId(userDto.id))
-
-                    if (refreshTokenUpdated) {
-                        call.respond(
-                            VerifyOtpResponse(
-                                username = userDto.username,
-                                phoneNo = phoneNumber,
-                                accessToken = accessToken,
-                                refreshToken = refreshToken,
-                                message = LOGIN_SUCCESS
-                            )
-                        )
-                    } else {
-                        call.respond(HttpStatusCode.InternalServerError, ErrorResponse.INTERNAL_SERVER_ERROR_RESPONSE)
-                    }
+                    generateTokens(it, jwtAccessTokenConfig, jwtRefreshTokenConfig, call, phoneNumber)
                 } ?: call.respond(HttpStatusCode.InternalServerError, "Phone number not found")
+            }else if(userCreated is User) {
+                userCreated?.let {
+                    generateTokens(it, jwtAccessTokenConfig, jwtRefreshTokenConfig, call, phoneNumber)
+                }
             }
         } else {
             call.respond(HttpStatusCode.BadGateway, getErrorMessage(isPhoneNoValid, otp))
         }
+    }
+}
+
+suspend fun generateTokens(user: User, jwtAccessTokenConfig: JwtTokenConfig, jwtRefreshTokenConfig: JwtTokenConfig,
+         call: ApplicationCall, phoneNumber: String){
+    val userDto = user.toDto()
+    val refreshToken = jwtAuthService.generateRefreshToken(userDto, jwtRefreshTokenConfig)
+    val accessToken = jwtAuthService.generateToken(userDto, jwtAccessTokenConfig)
+    val refreshTokenUpdated = addRefreshToken(refreshToken, ObjectId(userDto.id))
+
+    if (refreshTokenUpdated) {
+        call.respond(
+            VerifyOtpResponse(
+                username = userDto.username,
+                phoneNo = phoneNumber,
+                accessToken = accessToken,
+                refreshToken = refreshToken,
+                message = LOGIN_SUCCESS
+            )
+        )
+    } else {
+        call.respond(HttpStatusCode.InternalServerError, ErrorResponse.INTERNAL_SERVER_ERROR_RESPONSE)
     }
 }
 

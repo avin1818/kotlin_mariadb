@@ -12,6 +12,7 @@ import com.example.data.models.Response.RefreshTokenResponse
 import com.example.data.models.Role
 import com.example.data.models.user.toDto
 import com.example.plugins.jwtAuthService
+import com.example.services.BCryptService
 import com.example.services.MongoDBManager
 import com.example.utils.LOGIN_SUCCESS
 import io.ktor.http.*
@@ -40,33 +41,27 @@ fun Route.operatorLoginRoute(){
 }
 
 fun Route.adminLoginRoute(jwtAccessTokenConfig: JwtTokenConfig, jwtRefreshTokenConfig: JwtTokenConfig){
-
-    val moderatorsList = arrayListOf("admin@test.com")
-
     post("/admin/login"){
         val request = call.receive<AdminLoginRequest>()
         val email = request.email
         val password = request.password
 
-        if(moderatorsList.contains(email) && password == "admin"){
-            val adminUser = AdminUser(
-                id = "1",
-                role = Role.ADMIN.name
-            )
+        if(isEmailIdValid(email) && isPasswordValid(password)){
 
-            val refreshToken = jwtAuthService.generateRefreshToken(adminUser, jwtRefreshTokenConfig)
-            val accessToken = jwtAuthService.generateToken(adminUser, jwtAccessTokenConfig)
-            call.respond(
-                AdminLoginResponse(
-                    email = email,
-                    username = "Admin",
-                    accessToken = accessToken,
-                    refreshToken = refreshToken,
-                    message = LOGIN_SUCCESS
-                )
-            )
-        }else{
-            call.respond(HttpStatusCode.BadRequest, ErrorResponse("Admin not found"))
+            val privilegedUser = MongoDBManager.privilegedUserRepository.findByEmail(email)
+
+            privilegedUser?.let {
+
+                if(BCryptService.verifyPassword(password, it.password)){
+                    generateTokens(it, jwtAccessTokenConfig, jwtRefreshTokenConfig, call, email)
+                }else{
+                    call.respond(HttpStatusCode.BadRequest, "Incorrect password")
+                }
+
+            } ?: call.respond(HttpStatusCode.BadRequest, "Email not found")
+
+        } else {
+            call.respond(HttpStatusCode.BadRequest, "Invalid email or password")
         }
     }
 }

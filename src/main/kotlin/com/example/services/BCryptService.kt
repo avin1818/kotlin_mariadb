@@ -2,7 +2,7 @@ package com.example.services
 
 import at.favre.lib.crypto.bcrypt.BCrypt
 
-class BCryptService {
+object BCryptService {
 
     fun createHashedPassword(password: String): String =
         BCrypt.withDefaults().hashToString(12, password.toCharArray())

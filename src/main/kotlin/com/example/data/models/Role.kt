@@ -5,3 +5,8 @@ enum class Role {
     OPERATOR,
     ADMIN
 }
+
+enum class ManagementRole {
+    USER_MANAGER,
+    CONTENT_MANAGER
+}

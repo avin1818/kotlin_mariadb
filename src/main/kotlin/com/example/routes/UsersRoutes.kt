@@ -8,7 +8,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Route.getUsersRoute() {
-    get("/users") {
+    get {
         val page = call.parameters["page"]?.toIntOrNull() ?: 1
         val pageLimit = call.parameters["limit"]?.toIntOrNull() ?: 10
 

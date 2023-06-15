@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.example.data.models.AdminUser
 import com.example.data.models.JwtTokenConfig
+import com.example.data.models.privilegedUser.PrivilegedUserDTO
 import com.example.data.models.user.UserDTO
 import java.util.*
 class JwtAuthService {
@@ -23,18 +24,16 @@ class JwtAuthService {
         .withAudience(jwtTokenConfig.audience)
         .sign(Algorithm.HMAC512(jwtTokenConfig.secret))
 
-    fun generateToken(admin: AdminUser, jwtTokenConfig: JwtTokenConfig): String = JWT.create()
+    fun generateToken(user: PrivilegedUserDTO, jwtTokenConfig: JwtTokenConfig): String = JWT.create()
         .withIssuer(jwtTokenConfig.issuer)
-        .withClaim("id", admin.id)
-        .withClaim("role", admin.role)
+        .withClaim("email", user.email)
         .withAudience(jwtTokenConfig.audience)
         .withExpiresAt(getExpiration(jwtTokenConfig.expiresIn))
         .sign(Algorithm.HMAC512(jwtTokenConfig.secret))
 
-    fun generateRefreshToken(admin: AdminUser, jwtTokenConfig: JwtTokenConfig): String = JWT.create()
+    fun generateRefreshToken(user: PrivilegedUserDTO, jwtTokenConfig: JwtTokenConfig): String = JWT.create()
         .withIssuer(jwtTokenConfig.issuer)
-        .withClaim("id", admin.id)
-        .withClaim("role", admin.role)
+        .withClaim("email", user.email)
         .withAudience(jwtTokenConfig.audience)
         .sign(Algorithm.HMAC512(jwtTokenConfig.secret))
 
